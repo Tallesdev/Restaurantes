@@ -13,7 +13,7 @@ RUN mvn clean package -DskipTests
 
 # Estágio 2: Runtime (Execução)
 # Usa uma imagem leve (apenas o que é necessário para rodar o JAR)
-FROM openjdk:21-jdk-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copia o JAR do Estágio 1 (o build) para o Estágio 2 (o runtime)
