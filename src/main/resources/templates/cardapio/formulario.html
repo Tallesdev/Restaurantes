@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro/Edição de Cardápio</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container">
+  <div th:replace="fragments/navbar :: main-navbar"></div>
+  <h1 th:text="${cardapio.id == null ? 'Novo Item de Cardápio' : 'Editar Item de Cardápio'}">Formulário de Cardápio</h1>
+
+  <form th:action="@{/cardapio/salvar}" th:object="${cardapio}" method="post" class="form-container">
+
+    <input type="hidden" th:field="*{id}" />
+
+    <div class="form-group">
+      <label for="restaurante">Restaurante:</label>
+      <select id="restaurante" th:field="*{restaurante}" required>
+        <option value="">Selecione um Restaurante</option>
+        <option th:each="r : ${restaurantes}"
+                th:value="${r.id}"
+                th:text="${r.nome}"
+                th:selected="${cardapio.restaurante != null and cardapio.restaurante.id == r.id}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="produto">Produto:</label>
+      <select id="produto" th:field="*{produto}" required>
+        <option value="">Selecione um Produto</option>
+        <option th:each="p : ${produtos}"
+                th:value="${p.id}"
+                th:text="${p.nome} + ' (R$ ' + ${#numbers.formatDecimal(p.preco, 1, 2, 'POINT')} + ')'"
+                th:selected="${cardapio.produto != null and cardapio.produto.id == p.id}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="preco">Preço no Cardápio (deixe em branco para usar o preço do produto):</label>
+      <input type="text" id="preco" th:field="*{preco}">
+    </div>
+
+    <div class="form-group">
+      <label for="disponivel">Disponível:</label>
+      <select id="disponivel" th:field="*{disponivel}">
+        <option th:value="true" th:text="Sim"></option>
+        <option th:value="false" th:text="Não"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Salvar Item</button>
+      <a th:href="@{/cardapio/listar}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>

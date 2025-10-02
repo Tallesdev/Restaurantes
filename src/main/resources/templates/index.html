@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Principal - Gerenciamento de Restaurantes</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container">
+  <header class="main-header">
+    <h1>Sistema de Gerenciamento de Cardápios</h1>
+    <p>Selecione a seção que deseja administrar:</p>
+  </header>
+
+  <main class="menu-grid">
+    <a th:href="@{/restaurantes/listar}" class="menu-item menu-restaurante">
+      <span class="icon">🏠</span>
+      <h2>Restaurantes</h2>
+      <p>Cadastrar, editar e listar as unidades.</p>
+    </a>
+    <a th:href="@{/produtos/listar}" class="menu-item menu-produto">
+      <span class="icon">🍔</span>
+      <h2>Produtos</h2>
+      <p>Catálogo base de todos os itens disponíveis.</p>
+    </a>
+    <a th:href="@{/cardapio/listar}" class="menu-item menu-cardapio">
+      <span class="icon">📋</span>
+      <h2>Cardápios</h2>
+      <p>Montar o menu e definir preços por unidade.</p>
+    </a>
+  </main>
+</div>
+
+</body>
+</html>

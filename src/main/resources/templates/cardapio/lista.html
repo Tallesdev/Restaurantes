@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cardápios</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="fragments/navbar :: main-navbar"></div>
+    <h1>Itens do Cardápio</h1>
+
+    <div class="filter-box">
+        <h2>Filtros do Cardápio</h2>
+        <form th:action="@{/cardapio/listar}" method="get" class="filter-row">
+
+            <div class="form-group">
+                <label for="produtoNome">Filtrar por Produto:</label>
+                <select id="produtoNome" name="produtoNome">
+                    <option value="">Todos os Produtos</option>
+                    <option th:each="nome : ${nomesDistintos}"
+                            th:value="${nome}"
+                            th:text="${nome}"
+                            th:selected="${produtoNomeAtual != null and produtoNomeAtual == nome}">Nome do Produto</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="restauranteId">Filtrar por Restaurante:</label>
+                <select id="restauranteId" name="restauranteId">
+                    <option value="">Todos os Restaurantes</option>
+                    <option th:each="r : ${restaurantes}"
+                            th:value="${r.id}"
+                            th:text="${r.nome}"
+                            th:selected="${restauranteIdAtual != null and restauranteIdAtual == r.id}">Restaurante X</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="disponivel">Status:</label>
+                <select id="disponivel" name="disponivel">
+                    <option value="">Todos</option>
+                    <option value="true" th:selected="${disponivelAtual != null and disponivelAtual == true}">Disponível</option>
+                    <option value="false" th:selected="${disponivelAtual != null and disponivelAtual == false}">Indisponível</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Filtrar Cardápio
+            </button>
+
+            <a th:href="@{/cardapio/listar}" class="btn btn-secondary">Limpar Filtros</a>
+        </form>
+    </div>
+
+    <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}">Mensagem de Sucesso!</div>
+
+    <a th:href="@{/cardapio/novo}" class="btn btn-primary">Novo Item de Cardápio</a>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Restaurante</th>
+            <th>Produto</th>
+            <th>Preço</th>
+            <th>Disponível</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${itensCardapio}">
+            <td th:text="${item.id}">1</td>
+            <td th:text="${item.restaurante.nome}">Restaurante X</td>
+            <td th:text="${item.produto.nome}">Produto Y</td>
+            <td th:text="${#numbers.formatCurrency(item.preco)}">R$ 30,00</td>
+            <td th:text="${item.disponivel ? 'Sim' : 'Não'}">Sim</td>
+            <td>
+                <a th:href="@{/cardapio/editar/{id}(id=${item.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <a th:href="@{/cardapio/excluir/{id}(id=${item.id})}"
+                   onclick="return confirm('Tem certeza que deseja excluir este item do cardápio?')"
+                   class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(itensCardapio)}">
+            <td colspan="6">Nenhum item no cardápio cadastrado.</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

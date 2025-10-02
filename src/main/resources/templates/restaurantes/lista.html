@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Restaurantes</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="fragments/navbar :: main-navbar"></div>
+    <h1>Restaurantes Cadastrados</h1>
+
+    <div class="filter-box">
+        <h2>Busca de Restaurantes</h2>
+        <form th:action="@{/restaurantes/listar}" method="get" class="filter-row">
+
+            <div class="form-group">
+                <label for="busca">Buscar por Nome ou Endereço:</label>
+                <input type="text"
+                       id="busca"
+                       name="busca"
+                       th:value="${buscaAtual}"
+                       placeholder="Ex: Talles Grill ou Av. Paulista">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Pesquisar
+            </button>
+
+            <a th:href="@{/restaurantes/listar}" class="btn btn-secondary">Limpar</a>
+        </form>
+        <p style="font-size: 0.9em; margin-top: 5px;">A pesquisa encontra ocorrências no nome ou no endereço (ignora maiúsculas/minúsculas).</p>
+    </div>
+
+    <div th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}">Mensagem de Sucesso!</div>
+    <div th:if="${erro}" class="mensagem-erro" th:text="${erro}">Mensagem de Erro!</div>
+
+    <a th:href="@{/restaurantes/novo}" class="btn btn-primary">Novo Restaurante</a>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="restaurante : ${restaurantes}">
+            <td th:text="${restaurante.id}">1</td>
+            <td th:text="${restaurante.nome}">Restaurante Teste A</td>
+            <td th:text="${restaurante.endereco}">Rua X, 123</td>
+            <td th:text="${restaurante.telefone}">(11) 98765-4321</td>
+            <td>
+                <a th:href="@{/restaurantes/editar/{id}(id=${restaurante.id})}" class="btn btn-primary btn-sm">Editar</a>
+
+                <a th:href="@{/restaurantes/excluir/{id}(id=${restaurante.id})}"
+                   onclick="return confirm('Tem certeza que deseja excluir este restaurante?')"
+                   class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(restaurantes)}">
+            <td colspan="5">Nenhum restaurante cadastrado.</td>
+        </tr>
+        </tbody>
+    </table>
+    <hr style="margin-top: 40px; margin-bottom: 40px; border-top: 1px solid #ddd;">
+
+    <div class="statistics-section">
+        <h2>Relatório de Cardápio (Native Query)</h2>
+        <p>Contagem de itens de cardápio por restaurante (dados obtidos via SQL nativo).</p>
+
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>Restaurante</th>
+                <th>Total de Itens no Cardápio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${relatorioContagem}">
+                <td th:text="${item[0]}">Restaurante X</td>
+                <td th:text="${item[1]}">50</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(relatorioContagem)}">
+                <td colspan="2">Nenhum item de cardápio cadastrado para relatar.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

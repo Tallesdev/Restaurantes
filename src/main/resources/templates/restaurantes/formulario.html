@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro/Edição de Restaurante</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="container">
+  <div th:replace="fragments/navbar :: main-navbar"></div>
+  <h1 th:text="${restaurante.id == null ? 'Novo Restaurante' : 'Editar Restaurante'}">Formulário de Restaurante</h1>
+
+  <form th:action="@{/restaurantes/salvar}" th:object="${restaurante}" method="post" class="form-container">
+
+    <input type="hidden" th:field="*{id}" />
+
+    <div class="form-group">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" th:field="*{nome}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" th:field="*{endereco}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="telefone">Telefone:</label>
+      <input type="text" id="telefone" th:field="*{telefone}">
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Salvar</button>
+      <a th:href="@{/restaurantes/listar}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>
